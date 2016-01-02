@@ -208,6 +208,8 @@ The mount can still rotate along the axis parallel to the azimuthal axis (see Fi
 
 The same target from the first part of the rectification is used, but two black crosses are added to the selected horizontal black line. The distance $d_{ao}\ m$ between two crosses equals to the distance between the azimuthal and optical axis (which is known from the engineering design, see Figure \ref{fig:rect_azi_axis}). 
 
+%% Photograph of the camera unit with the telescope mounted on the top
+%% Screenshot of the digital crosshair and the offset
 \begin{figure}[htb]
 	\centering
 	\begin{minipage}{.42\textwidth}
@@ -234,11 +236,11 @@ offset &= pixel\_offset * pixel\_size
 \end{aligned}
 \end{equation*}
 
-%% The top view of the model of the camera unit
+%% Geometry schema showing how to calculate angle beta - pixel offset
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=13cm]{fig/rect_pixel_offset.pdf}
-	\caption{The schema of a rectification target being projected to the image sensor of the camera. The value of the angle $\beta$ is one of the output of the rectification process.}
+	\caption{The top view schema of a rectification target being projected to the image sensor of the camera. The value of the angle $\beta$ is one of the output of the rectification process.}
 	\label{fig:rect_pixel_offset}
 \end{figure}
 
@@ -246,7 +248,17 @@ offset &= pixel\_offset * pixel\_size
 %.........................................................................
 \subsection{Finding the default elevation angle}
 
+Given the application of the system the camera is expected to mainly observe the sky. Considering the limited elevation range of the manipulator \texttt{Flir PTU D46-70} (see Section \ref{txt:camera_unit}), the camera must be mounted to the manipulator with the default elevation angle approximately $-60^{\circ}$. However, after fixing the camera it is necessary to find default elevation angle precisely. 
 
+For this purpose a pair of rectification targets, which consist of vertical black and white lines representing the marks of a ruler. The targets are positioned in a row with the distance of a few meters so that the front target would overlap approximately half of the rare target when observed from the camera. Both targets must be rotated so that the lines become horizontal, then the operator manually adjusts the elevation of the manipulator so that the digital crosshair would intersect the same mark on both targets where the two marks form a straight line (see figure \ref{fig:rect_default_elevation_angle}). Once found the current elevation angle is recorded and integrated to the model of the camera unit as an angle of rotation along the Y-axis of the joint \texttt{camera} (see Section \ref{txt:camera_unit}).
+
+%% The rectification target for finding the default elevation angle.
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=13cm]{fig/rect_default_elevation_angle.png}
+	\caption{Front target of a pair of the rectification targets used to find a default elevation angle (left). A screenshot from the image stream of the camera with the crosshair focused on a row where the marks of the rulers align (right).}
+	\label{fig:rect_default_elevation_angle}
+\end{figure}
 
 
 %=========================================================================
