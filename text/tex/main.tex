@@ -25,18 +25,20 @@
 \usepackage{url}
 \DeclareUrlCommand\url{\def\UrlLeft{<}\def\UrlRight{>} \urlstyle{tt}}
 
-%zde muzeme vlozit vlastni balicky
+%%%%%%% Vlastni balicky %%%%%%%%
 
 %% Lorem ipsum
 \usepackage{blindtext}
 
-%% Table of contents
-%\usepackage[bookmarksdepth=section]{hyperref}
-
 %% Captions
 \usepackage{caption} % \captionof
 
-\usepackage{mathtools}
+%% Acronyms
+\usepackage{acro}
+
+%% Tables
+\usepackage{booktabs}
+\usepackage{tabularx}
 
 % =======================================================================
 % balíček "hyperref" vytváří klikací odkazy v pdf, pokud tedy použijeme pdflatex
