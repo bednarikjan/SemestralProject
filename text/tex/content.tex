@@ -14,30 +14,30 @@
 \chapter{Introduction}
 % 1 - 2 ns
 
-- coincidence rangefindrer: \url{https://en.wikipedia.org/wiki/Coincidence_rangefinder}
-- proc pouzit opticky system 0 hloubkove senzory maji maly dosah a nefunguji ve venkovnim prostredi
-- Radar (radio detection and ranging) is a device with the active emission of the radio signal. To us it for localization of the object either single radar measuring both the angle and the distance to a target or multiple radars measuring only the distance to a target and triangulating its position can be used \cite{toomay2012radar}\cite{BistaticRadar}. +sonar, laser
+In todays world the localization of the aerial objects is an essential component of two main domains, a public air traffic control (ATC) and a national defense. In both cases the main purpose of the system is to estimate a distance and a 3D position of the given airborne vehicle.
 
-- vyhody/nevyhody systemu
-/ princip rage finderu vyuzival uz thales https://en.wikipedia.org/wiki/Thales
+In case of the ATC the airports mainly rely on the multilateration systems which specialize on surveillance and control of air traffic during all flight phases \cite{Gaviria:newStrategiesMLAT}. The design of such a system expects that the aircrafts are equipped with a secondary surveillance radar transponders which periodically emit the signals to the ground receiving stations, however primary radars are widely used as well \cite{Airtrafficmuseum}. In military segment the aerial object localization mainly serves the purpose of detecting and identifying the intruder which might pose a threat for a given area under protection. In this scenario only primary radars are be used since the aerial object is not expected to cooperate.
 
-OLS = Optical Localization System
-- zminit problematiku zastaniceni a rektifikace a odkaz na prislusnou kapitolu
+Even though being widely used a radar based localization systems suffer from a several drawbacks. A radar is a device based on the active emission of the radio signal \cite{toomay2012radar}. In order to localize distant objects a huge amount of energy must be radiated to make sure it would return from the target and a small amount of energy returned might be easily disrupted \cite{Airtrafficmuseum}. What is more in defense applications it is not desirable that the tracked object would find out it is being tracked, which is the condition an actively radiating system such as a radar cannot achieve. Last but not least the professional class radars in use by both airports and military are in general expensive, large and heavy devices not suitable for mobile deployment.
+
+In this work I propose a passive and fully autonomous system for detecting, tracking and localizing aerial objects which is based merely on ordinary RGB cameras, an Optical Localization System (OLS). Since the system does not rely on active emission of a signal, but rather captures the optical information from the environment it can be used for secret localization of aerial targets. The system is designed to be well suited for mobility and temporary deployment since each camera station used weigh no more than twenty kilograms and the whole system is relatively inexpensive as well.
+
 
 %-------------------------------------------------------------------------
 %-------------------------------------------------------------------------
 \section{Background} \label{txt:background}
 
-%-------------------------------------------------------------------------
-%-------------------------------------------------------------------------
-\section{Problem formulation}
+The principle of the optical localization of objects, which is based on triangulation, is well known for quiet a long time. The first devices which were designed to allow an operator to estimate a distance to a given object using mechanical and optical principles - optical range finders - emerged in the second half of the 18th century\cite{bud1998instruments}. Ever since the optical range finders had been mostly used for military operations in order to estimate the position of either naval, airborne or terrestrial targets until the World War II when a radar was invented.
+
+The OLS system aims to utilize the same principle as the old optical range finders, however instead of an optical device requiring the operator to aim on the target manually the OLS takes advantage of the RGB cameras and the image processing techniques capable of detecting, tracking and localizing the target autonomously without the need for a human to interfere. Furthermore with the use of sensors capable of finding a geographical position of each observer unit the OLS system estimates a global geographical position of a given target (not only a distance or a relative position).
+
 
 %-------------------------------------------------------------------------
 %-------------------------------------------------------------------------
 \section{Related work}
 % 1 - 2 ns
 
-The principle of the optical localization of objects is well known for quiet a long time (the first optical range finders emerged in 18th century\cite{reviews2013study}) and nowadays is still mainly used for military purposes and in robotics. However the professional systems aiming on automatic localization of aerial (as well as terrestrial and underwater) targets mostly rely on active devices, such as radars or sonars and there is very little use of pure passive optical devices (such as RGB cameras, thermal imaging cameras, etc.). The reason might be the complexity of the whole solution or the operation constrained by the weather conditions (see Section \ref{txt:background}).
+The professional systems aiming on automatic localization of aerial (as well as terrestrial and underwater) targets mostly rely on active devices, such as radars or sonars and there is very little use of pure passive optical devices (such as RGB cameras, thermal imaging cameras, etc.). The reason might be the complexity of the whole solution or the operation constrained by the weather conditions (see Section \ref{txt:background}).
 
 On the other hand since the application of multiple view geometry has been one of hot topics in the computer vision during the past decade, many R\&D groups (specializing mostly on robotics) attempt to base their solutions on multi camera optical localization.
 
@@ -51,25 +51,7 @@ As for the detection and tracking of the distant aerial targets, one of the most
 %-------------------------------------------------------------------------
 \section{Thesis organization}
 
-- napad: rozdelit uvod do pokapitol
-	- background
-	- related work
-	- problem formulation
-	- system overview
-	- thesis organization
-
-- Slouží k zasazení řešené problematiky do širšího kontextu
-- o optickych dalkomerech
-- vyhody systemu (pasivni radar) oproit aktivnim systemum
-- vyuziti
-
-- v podobě stručného obsahu jednotlivých kapitol definuje strukturu písemné práce.
-
-
--- dalsi kapitoly --
-
- formulaci cíle práce, charakteristiku současného stavu
- řešené problematiky a teoretická a odborná východiska řešených problémů.
+The chapter \ref{txt:system_overview} presents the general information about the system and describes its operation in a big picture. The chapter \ref{txt:camera_unit} analyzes the devices making up a camera unit which is a core hardware component of the system and presents the corresponding model. Next chapter \ref{txt:stationing_and_rectification} explains the necessity of finding the precise position and orientation of the whole camera station as well as evaluating the deviations between the camera unit model and its real construction. The chapter \ref{txt:detection_and_tracking} discuss the core computer vision components of the system, the detection and tracking and the chapter \ref{txt:target_localization} explains how a localization problem is solved. The chapter \ref{txt:implementation} goes through the implementation details and the final chapter \ref{txt:conclusion} concludes the work.
 
 
 %=========================================================================
@@ -469,7 +451,7 @@ The object itself is modeled as a set of patches, each patch being already learn
 
 %=========================================================================
 %=========================================================================
-\chapter{Target localization}
+\chapter{Target localization} \label{txt:target_localization}
 % 2,5 - 6 ns
 
 - triangulace
@@ -667,28 +649,13 @@ Besides the framework ROS a few other publicly available libraries are used with
 \paragraph{Serial} A cross-platform library Serial\footnote{The official website of Serial: \url{https://github.com/wjwwood/serial}} implemented in C++ provides the API for interfacing with RS-232 serial like ports. It is used to control the manipulator.
 
 
-
 %=========================================================================
 %=========================================================================
-\chapter{Experiments and results}
-% 1 - 3 ns
-
-- vlastni datova sada
-- experimenty na ziskena a porizene datove sade
-- === EXPERIMENTY NA REALNYCH DATECH ===
-
-%=========================================================================
-%=========================================================================
-\chapter{Conclusion}
+\chapter{Conclusion} \label{txt:conclusion}
 % 1 - 2 ns
 
-- zhodnocení dosažených výsledků se zvlášť vyznačeným vlastním přínosem studenta
-- zhodnocení z pohledu dalšího vývoje projektu vzhledem k diplomové práci
-- moznosti dalsiho vyvoje: modelovani okoli ve 3D nebo vyuziti teto info z mapy, paralelizace narocnych casti na GPU
-- veci, co se zatim nebraly v uvahu
-	- system je umisten na rozhrani dvou a vice UTM zon
+In this work the novel system for autonomous optical localization of aerial targets was presented. The principle of triangulation is well known and widely used, however the main contribution of the system is the fact it is designed to operate autonomously from detecting the object to estimating its position. As a first step a suitable placement of available camera units had to be designed and the proper hardware which each camera station consists of had to be selected. A model of the camera unit represented by a kinematic chain was proposed and all camera units were then rectified in order to minimize the difference between the model and the real construction of the camera units.
 
-- moznost sdileni info o appearance modelu mezi CUs
-- vylepseni TLD, protoze prepokladame fixni scenu (meni se pouze natoceni kamery)
+As fo the software solution the most promising computer vision techniques for both detection and tracing of the target were proposed and one of them, a free implementation of the TLD algorithm was eventually integrated in the system. The first prototype of the algorithm for final estimation of the target's location utilizing the triangulation was proposed and implemented as well. The architecture of the system based on the ROS framework was designed and implemented and the physical simulation software Gazebo was used to experiment with the system placed in a virtual scene.
 
-
+As far as the further development is concerned, the autonomous detection algorithm will be implemented and the tracking algorithm will be improved on since the OLS system expects a static background (as opposed to the TLD) so the background modeling could be incorporated to further improve the tracker performance. The subsystem for target handoff among the cameras will be designed and implemented and the localization algorithm will be improved on to reflect the uncertainty of the locations and orientations of the separate joints in the kinematic models and to provide the result in global geographical coordinates (most likely UTM). A proper dataset will be acquired and the system will be tested thoroughly.
