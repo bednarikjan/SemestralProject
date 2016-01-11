@@ -150,28 +150,9 @@ A camera unit (see Figure \ref{fig:camera_unit_photo_model}) consists of a surve
 	\label{fig:camera_unit_photo_model}
 \end{figure}
 
-\paragraph{manipulator Flir PTU-D46-70}
-- PTU Flir
-- HW/SW limity pohybu
-- krokove motory
-- proble proklouznuti kroku
-- configuration space \cite{Russell:2009:AIM:1671238}
+\paragraph{manipulator Flir PTU-D46-70} A professional manipulator PTU-D46-70\footnote{A website of product Flir PTU-D46-70: \url{http://www.flir.com/mcs/view/?id=53712}} produced by a well established manufacturer Flir is used (see Figure \ref{fig:prosilica_gt1290c_flir_ptud4670}). As compared to the other professional manipulators this is an entry level device consisting of two stepper motors (pan and tilt axes). the device is capable of maximum angular speed of $60^{\circ}/s$ with the resolution of $0.003^{\circ}$ while the payload must not exceed 4.08 kg \cite{Flir_ptud4670}. The operational range is limited to $[-180^{\circ}, 180^{\circ}]$ in azimuth and $[-47^{\circ}, 80^{\circ}]$ in elevation. The manipulator incorporates no position feedback, the position is inferred from the number of steps and the current resolution, thus it is necessary not to overload the manipulator, otherwise it could loose synchrony and report wrong position. 
 
-\paragraph{camera Prosilica GT 1290C}
-- a set of cameras with trigger synchronization (ptp)
-
-%-------------------------------------------------------------------------
-%-------------------------------------------------------------------------
-\section{Model} \label{txt:model}
-
-- návrh kinematického řetězce modelu manipulátoru
-
-- ukazat 2D diagramy, 3D model z rvizu/gazeba
-
-- schema, kde bude ukazano, co je azimuthal a elevation axis
-
-- pouziti rosovskeho tf: \cite{tf}
-
+\paragraph{camera Prosilica GT 1290C} A camera Prosilica GT 1290C\footnote{A website of product Prosilica GT 1290C: \url{https://www.alliedvision.com/en/products/cameras/detail/1290-1.html}} is an industrial camera manufactured by the company Allied Vision (see Figure \ref{fig:prosilica_gt1290c_flir_ptud4670}). It is a color camera equipped with CCD sensor (type 1/3'') with the resolution of $1280 \times 960$ px and support for $33.3$ FP and it communicates through gigabit Ethernet \cite{Prosilica_gt1290c}. What is important the camera natively supports the PTP protocol for precise time synchronization which is a crucial feature in each application relying on stereo vision as it is capable of time synchronization devices within the range of nanoseconds \cite{PTP}.
 
 %% Photos of Flir and Prosilica.
 \begin{figure}[htb]
@@ -181,11 +162,25 @@ A camera unit (see Figure \ref{fig:camera_unit_photo_model}) consists of a surve
 	\label{fig:prosilica_gt1290c_flir_ptud4670}
 \end{figure}
 
+%-------------------------------------------------------------------------
+%-------------------------------------------------------------------------
+\section{Model} \label{txt:model}
+
+A camera unit model is based on the kinematic chain consisting of six joints and five links corresponding to the distance between the separate part of the tripod and the manipulator (see Figure \ref{fig:camera_unit_kinematic_chain}). The starting joint \texttt{ground} itself is dependent on the reference location (let's call it \texttt{world}) which represents the origin of the global coordinate frame. The transformation between the \texttt{world} and \texttt{ground} reflects the positioning and heading of the given manipulator within the environment (which is estimated during the stationing process, see Section \ref{txt:stationing_and_rectification}).
+
+The kinematic chain is designed as the composition of transformation matrices where a single joint can be located by applying the Euclidean transformation on the position of the joint it is dependent on. For instance the transformation matrix $M_{cam}$ of the joint \texttt{camera} can be derived as:
+
+\begin{equation}
+M_{cam} = M_{ele}T_{cam}R_{Z_{cam}}R_{X_{cam}}R_{Y_{cam}},
+\end{equation}
+
+where $M_{ele}$ is the transformation matrix of the joint \texttt{ele} which the joint \texttt{camera} is dependent on. 
+
 %% A schema of the camera unit - kinematic chain.
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=10cm]{fig/camera_unit_kinematic_chain.pdf}
-	\caption{A schematic view of a kinematic chain of a camera unit with the joints depicted by the yellow circles with black crosses. The sizes of all components necessary to specify the translation matrices between consecutive joints are shown as well.}
+	\includegraphics[width=14cm]{fig/camera_unit_kinematic_chain.pdf}
+	\caption{A schematic view of a kinematic chain of a camera unit with the joints depicted by the yellow circles with black crosses. The sizes of all components necessary to specify the translation matrices between consecutive joints are shown as well. Note that this is a rear view, i.e. the optical axis of the camera is seen from behind. Thus the joints \texttt{camera} and \texttt{focus} overlap as they both lie on the optical axis.}
 	\label{fig:camera_unit_kinematic_chain}
 \end{figure}
 
@@ -384,21 +379,83 @@ For this purpose a pair of rectification targets, which consist of vertical blac
 \chapter{Detection and tracking} \label{txt:detection_and_tracking}
 % 4,5 - 9 ns
 
-- === DETEKCE VZDALENYCH OBJEKTU V OBRAZE ===
-- === SLEDOVANI OBJEKTU VE VICEKAMEROVYCH SYSTEMECH ===
-- === ALGORITMY VHODNE PRO RESENI ULOHY ===
+%-------------------------------------------------------------------------
+%-------------------------------------------------------------------------
+\section{Object model}
 
-- TLD
-- moznost sdileni info o appearance modelu mezi CUs
+Choosing a suitable representation of an object of interest is is a first step when designing a tracker. It is a crucial task since the choice of the features determines the type of the final tracker due to the strong relationship between the algorithm and the representation of the object and it can significantly impact the overall performance of the tracker. There are two main representations, the \textit{shape} and the \textit{appearance} \cite{Yilmaz:2006:OTS:1177352.1177355}.
 
-Detection:
- There
- are several methods to locate mobile robots using an external camera array. The most significant
- approaches can be divided into two groups. The first group includes those works that make use of
- strong prior knowledge by using artificial landmarks attached to the robots [5,6]. The second group
- includes the works that use the natural appearance of the robots and the camera geometry to obtain the
- positions [2].
+\paragraph{shape representation} 
+This category covers the use of points, geometric shapes, silhouette and contour, articulated models and skeletal models. The point representation is not suitable for OLS since the distant aerial objects appear relatively small in the image and might not provide enough distinctive points. The geometric shapes seem suitable as long as the aerial object is far enough so that it could be approximated by a primitive geometric shape. Silhouettes and contours are mostly used for tracking non rigid objects (which is not the case of OLS), neither articulated model is needed to describe an UAV. Considering the small size of the object of interest, a skeletal model would most probably degrade to a single line or a point.
 
+\paragraph{appearance representation} 
+The second category covers the use of templates, active appearance models and multiview appearance models. Active appearance models seem promising since they simultaneously model the object shape and appearance, however there is a need for an offline training phase. The templates combine the spatial and appearance information and can scale well to support varying object size (UAV approaching or flying away). A multiview appearance model might perform even better since it is designed to be robust against variation of the appearance of one object due to the change of its orientation.
+
+%-------------------------------------------------------------------------
+%-------------------------------------------------------------------------
+\section{Detection}
+
+Before a tracking of the object can be initiated the object of interest must first be discovered, which is the main task of object detectors. Even though the OLS allows a human operator to interfere and manually select an object for tracking, the system should be able to perform fully autonomously as well. The approaches to detect an object can be divided into two categories based on the appearance of the object, where the first group covers the cases where the system already posses a strong information about the objects since they incorporate artificial landmarks, while the second group relies merely on the natural appearance and has only limited or no prior knowledge about the objects \cite{Multi-Camera_Sensor_System_for_3D_Segmentation}. Since the OLS aims on tracking unknown UAVs the first group of approaches is out of question.
+
+A couple of approaches can be distinguished among the detectors using natural appearance \cite{Yilmaz:2006:OTS:1177352.1177355}:
+
+\paragraph{detection of points} This approach goes with the shape representation of the object given by the keypoints. Among others the Harris corner detector or SIFT and SURF descriptors are widely used.
+
+\paragraph{background modeling} Under the assumption an observed scene does not change rapidly its appearance can be learned resulting in a background model. The task of the object detector is then to estimate for each subregion or even each pixel whether it belongs to a background or to a foreground (i.e. the object of interest). A widely used approach is to model each pixel as a mixture of Gaussians (in order to support a periodically changing background). Another possible solution is to model intensity variations of separate pixels as the states (including both \textit{background} and \textit{foreground} state) and then with the help of Hidden Markov Models to estimate the state a given pixel is currently in. Since it is possible to enhance these algorithms to allow for the camera motion (resulting in the change of the camera view) they seem suitable for the OLS system. 
+
+\paragraph{supervised classification} If the (coarse) class of the objects to be tracked is known beforehand and a proper dataset is available, a classifier can be trained to detect the objects. Among others the neural networks or adaptive boosting methods are widely used. Since the OLS aims to localize UAVs, the utilization of a classifier seems like a suitable solution.
+
+%-------------------------------------------------------------------------
+%-------------------------------------------------------------------------
+\section{Tracking}
+
+The main purpose of the tracker is to iteratively estimating the trajectory of the tracked object from frame to frame and regarding the approaches the trackers can be divided into three main categories \cite{Yilmaz:2006:OTS:1177352.1177355}:
+
+\paragraph{point tracking} 
+The tracker detects the keypoints in each frame and, select those representing the object and computes the transformation from the previous frame.
+
+\paragraph{kernel tracking} 
+This approach corresponds to a representation of an object using a template, where kernel is the description of both shape and appearance.
+
+\paragraph{silhouette tracking}
+Silhouettes representing the object can be tracked either by shape matching or contour evolution. \\
+
+Since the representation by a template (or multiple templates) suits conditions of the OLS the best, an approach Tracking Learning Detection belonging to the \textit{kernel tracking} category was chosen to perform the tracking of the object of interest. TLD is one of the best performing state-of-the-art algorithms developed for tracking general objects and its capabilities seem promising for the needs of OLS. For detailed description of the algorithm see Section \ref{txt:tracking_learning_detection}.
+
+%.........................................................................
+%.........................................................................
+\subsection{Tracking Learning Detection} \label{txt:tracking_learning_detection}
+
+The Tracking Learning Detection (TLD) \cite{Kalal:2012:TRA:2225045.2225082} is an algorithm designed for performing so called long-term tracking, a robust tracking of an object which might change its appearance, be temporarily occluded by closer objects or temporarily completely disappear from the scene. Since this task cannot be achieved solely by a tracker nor by a detector, the TLD aims to combine the strengths of the detection and tracking algorithms by combining their results. Furthermore the algorithm incorporates the online adaptation subsystem capable of learning the new appearances of the tracked object in the course of the tracking.
+
+A conceptual diagram of the TLD algorithm is shown in Figure \ref{fig:tld_block_diagram}. The \texttt{tracking} component tracks the object and for each frame produces the new position. It expects that object does not disappear (occlusion, out of FOV) from the scene and if it does the tracker fails. The \texttt{detection} component performs full scanning of the image for each frame. It detects the object and if needed it reinitializes the tracker. The \texttt{learning} component is capable of generating new appearances of the tracked object and thus improving the performance of the detector. 
+
+The object itself is modeled as a set of patches, each patch being already learned appearance represented by the rectangular bounding box around the object rescaled to a normalized resolution of 15 x 15 pixels. The similarity of the patches is given by the normalized cross-correlation.
+
+%% TLD block diagram
+%% TLD PN learning block diagram
+\begin{figure}[htb]
+	\centering
+	\begin{minipage}{.34\textwidth}
+		\centering
+		\includegraphics[width=.99\linewidth]{fig/tld_block_diagram.png}
+		\captionof{figure}{A diagram of the main TLD components. Image is adopted from \cite{Kalal:2012:TRA:2225045.2225082}.}
+		\label{fig:tld_block_diagram}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.63\textwidth}
+		\centering
+		\includegraphics[width=.99\linewidth]{fig/tld_pn_learning_block_diagram.png}
+		\captionof{figure}{A diagram of the PN learning process. Image is adopted from \cite{Kalal:2012:TRA:2225045.2225082}.}
+		\label{fig:tld_pn_learning_block_diagram}
+	\end{minipage}
+\end{figure}
+
+\paragraph{Detection} Detector treats each frame as an independent one and scans a full image. A scanning window is used which is gradually scaled (in order for the detector to achieve scale invariance) and iteratively shifted along a regular grid of candidate positions. Since this task is computationally intensive a cascade classifier is used so that the detector could quickly decide whether a given subregion contains the object. Therefore a cascade classifier is used. In case of TLD it consists of three sequential stages specifically ordered so that earlier the stage is the more subregions it should reduce while being computationally less expensive. Should the sub-region be rejected by any stage, later stages ignore it completely.
+
+\paragraph{Tracking} The tracking sub-system is based on thew algorithm called the Median-Flow tracker. A $10 \times 10$ grid is used to select the positions within the bounding box representing the object. For each position a given point is tracked between the consecutive frames using pyramidal Lucas-Kanade tracker and eventually the tracker only accepts a 50\% of the most reliable displacements to estimate a new position of the target.
+
+\paragraph{Learning} Since the classifier used in the detection phase is initially trained using only one positive patch (the initial bounding box selected by a user) it tends to make errors as a video stream progress since the moving object of interest change its appearance due to the transformation caused by its motion. Therefore an online so called \texttt{P-N learning} component is incorporated in the system which gradually extends the training sets. Two experts are used, a \texttt{P-expert} identifies only false negatives while \texttt{N-expert} identifies only false positives. Once a wrongly classified patch is found, the experts extend the training set and the classifier is retrained (see Figure \ref{fig:tld_pn_learning_block_diagram}).
 
 %=========================================================================
 %=========================================================================
@@ -432,6 +489,7 @@ projection onto the image plane in an ideal camera without lenses through the ex
  point. But actually the four rays may not intersect in the same 
  point  due  to  the  low-quality  video  cameras  and  other 
  complicated  reasons.
+ 
 
 
 %=========================================================================
@@ -504,17 +562,20 @@ The OLS is designed to become a relatively complex system, thus it exhibits non-
 %.........................................................................
 \subsection{Standard ROS packages}
 
-ROS provides a wide range of standard packages for interaction with various hardware devices. The implementation of OLS utilizes following packages:
+ROS provides a wide range of standard packages for interaction with various hardware devices and performing various computations. The implementation of OLS utilizes following packages:
 
 \begin{description}
-	\item[avt\_vimba\_camera\footnote{Package avt\_vimba\_camera: \url{http://wiki.ros.org/avt_vimba_camera}}] \hfill \\
+	\item[avt\_vimba\_camera]\footnote{Package avt\_vimba\_camera: \url{http://wiki.ros.org/avt_vimba_camera}} \hfill \\
 	This package wraps the Vimba GigE SDK provided by Allied Vision Technologies, the manufacturer of the Prosilica series cameras, and allows the programmer to subscribe to the topic \texttt{camera\textbackslash image\_raw} and easily access the image stream.
 	
-	\item[keyboard\footnote{Package keyboard: \url{http://wiki.ros.org/keyboard}}] \hfill \\
+	\item[keyboard]\footnote{Package keyboard: \url{http://wiki.ros.org/keyboard}} \hfill \\
 	The package process the keyboard events and expose them via \texttt{keydown} and \texttt{keyup} topics.
 	
-	\item[joy\footnote{Package joy: \url{http://wiki.ros.org/joy}}] \hfill \\
+	\item[joy]\footnote{Package joy: \url{http://wiki.ros.org/joy}} \hfill \\
 	This package process the events from a joystick and/or gamepad and expose them via \texttt{joy} topic.
+	
+	\item[tf]\footnote{Package tf: \url{http://wiki.ros.org/tf}} \hfill \\
+	The package manages the distribution of the states of all joints within all robot models (in case of OLS the kinematic chains representing the camera units) among all nodes as well as it performs the transformation between given frames on demand \cite{tf}.
 	
 \end{description}
 	
@@ -627,5 +688,7 @@ Besides the framework ROS a few other publicly available libraries are used with
 - veci, co se zatim nebraly v uvahu
 	- system je umisten na rozhrani dvou a vice UTM zon
 
+- moznost sdileni info o appearance modelu mezi CUs
+- vylepseni TLD, protoze prepokladame fixni scenu (meni se pouze natoceni kamery)
 
 

@@ -23,8 +23,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2"
-     inkscape:cx="536.29302"
-     inkscape:cy="208.8129"
+     inkscape:cx="564.70202"
+     inkscape:cy="153.14298"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1416,25 +1416,49 @@
        inkscape:connector-curvature="0" />
     <text
        xml:space="preserve"
-       style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="558.7738"
-       y="752.29919"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="558.24347"
+       y="741.86938"
        id="text9639-4"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan9641-0"
-         x="558.7738"
-         y="752.29919"
+         x="558.24347"
+         y="741.86938"
          style="font-size:8px">CAMERA</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 553.23546,775.00719 5.74525,-21.83192"
+       d="m 553.27614,775.06533 6.70311,-32.31549"
        id="path9652-5"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 558.59204,753.55092 34.69473,0"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 559.47592,743.12109 34.69473,0"
        id="path9654-6"
        inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 559.52764,767.17468 28.31973,0"
+       id="path9654-6-1"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 554.84304,775.37694 5.05282,-8.37827"
+       id="path9652-5-9"
+       inkscape:connector-curvature="0"
+       inkscape:transform-center-x="-2.4062121"
+       inkscape:transform-center-y="-4.0563371" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="559.87219"
+       y="765.53339"
+       id="text9639-4-9"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan9641-0-7"
+         x="559.87219"
+         y="765.53339"
+         style="font-size:8px">FOCUS</tspan></text>
   </g>
 </svg>
