@@ -20,7 +20,7 @@ In case of the ATC the airports mainly rely on the multilateration systems which
 
 Even though being widely used a radar based localization systems suffer from a several drawbacks. A radar is a device based on the active emission of the radio signal \cite{toomay2012radar}. In order to localize distant objects a huge amount of energy must be radiated to make sure it would return from the target and a small amount of energy returned might be easily disrupted \cite{Airtrafficmuseum}. What is more in defense applications it is not desirable that the tracked object would find out it is being tracked, which is the condition an actively radiating system such as a radar cannot achieve. Last but not least the professional class radars in use by both airports and military are in general expensive, large and heavy devices not suitable for mobile deployment.
 
-In this work I propose a passive and fully autonomous system for detecting, tracking and localizing aerial objects which is based merely on ordinary RGB cameras, an Optical Localization System (OLS). Since the system does not rely on active emission of a signal, but rather captures the optical information from the environment it can be used for secret localization of aerial targets. The system is designed to be well suited for mobility and temporary deployment since each camera station used weigh no more than twenty kilograms and the whole system is relatively inexpensive as well.
+In this work I propose a fully autonomous passive multi camera system for detecting, tracking and localizing aerial objects which is based merely on ordinary RGB cameras, an Optical Localization System (OLS). Since the system does not rely on active emission of a signal, but rather captures the optical information from the environment it can be used for secret localization of aerial targets. The system is designed to be well suited for mobility and temporary deployment since each camera station used weigh no more than twenty kilograms and the whole system is relatively inexpensive as well.
 
 
 %-------------------------------------------------------------------------
@@ -37,13 +37,13 @@ The OLS system aims to utilize the same principle as the old optical range finde
 \section{Related work}
 % 1 - 2 ns
 
-The professional systems aiming on automatic localization of aerial (as well as terrestrial and underwater) targets mostly rely on active devices, such as radars or sonars and there is very little use of pure passive optical devices (such as RGB cameras, thermal imaging cameras, etc.). The reason might be the complexity of the whole solution or the operation constrained by the weather conditions (see Section \ref{txt:background}).
+The professional systems aiming on automatic localization of aerial (as well as terrestrial and underwater) targets mostly rely on active devices, such as radars or sonars and there is very little use of pure passive optical devices (such as RGB cameras, thermal imaging cameras, etc.). The reason might be the complexity of the whole solution or the operation constrained by the weather conditions.
 
 On the other hand since the application of multiple view geometry has been one of hot topics in the computer vision during the past decade, many R\&D groups (specializing mostly on robotics) attempt to base their solutions on multi camera optical localization.
 
 One of a widely used approaches is to set up so called \textit{intelligent space}\cite{intelligentSpace}, the bounded area under surveillance of multiple cameras reporting to the the central system. In \cite{Multi-Camera_Sensor_System_for_3D_Segmentation} multiple terrestrial robots are detected, tracked and localized by the multi camera system. For all cameras the intrinsics and extrinsics are known beforehand and do not change over time.  A similar approach is used also in \cite{Localization_and_Geometric_Reconstruction_of_Mobile_Robots} but this system uses the robot's odometers as well in order to improve the resulting position estimated by the optical system. The system presented in \cite{A_3D_visual_localization} then relies on four ordinary RGB cameras with known parameters (intrisics, extrinsics) to estimate the position of the easy to detect and static object using the Perpendicular Foot Method algorithm.
 
-Even though all of the aforementioned approaches utilize the ordinary RGB cameras for detection and tracking and in general estimate the location of the object using the triangulation algorithm, they all assume the object moves strictly within the specified bounded region and they rely on fixed positions of the cameras. Thus they do not have to deal with the imprecisions arose from the uncertainty of the current camera pose estimation and with the problems of transferring the target. 
+Even though all of the aforementioned approaches utilize the ordinary RGB cameras for detection and tracking and in general estimate the location of the object using the triangulation algorithm, they all assume the object moves strictly within the specified bounded region and they rely on fixed positions of the cameras. Thus they do not have to deal with the imprecisions arose from the uncertainty of the current camera pose estimation and with the problems of handing off the target to other camera units once a target moves out of the operational range of the given camera. 
 
 As for the detection and tracking of the distant aerial targets, one of the most recent approaches was presented by Rozantsev et al.\cite{DBLP:journals/corr/RozantsevLF14}. The algorithm combine both the appearance and motion clue in order to distinguish the object from the complex background.
 
@@ -51,7 +51,7 @@ As for the detection and tracking of the distant aerial targets, one of the most
 %-------------------------------------------------------------------------
 \section{Thesis organization}
 
-The chapter \ref{txt:system_overview} presents the general information about the system and describes its operation in a big picture. The chapter \ref{txt:camera_unit} analyzes the devices making up a camera unit which is a core hardware component of the system and presents the corresponding model. Next chapter \ref{txt:stationing_and_rectification} explains the necessity of finding the precise position and orientation of the whole camera station as well as evaluating the deviations between the camera unit model and its real construction. The chapter \ref{txt:detection_and_tracking} discuss the core computer vision components of the system, the detection and tracking and the chapter \ref{txt:target_localization} explains how a localization problem is solved. The chapter \ref{txt:implementation} goes through the implementation details and the final chapter \ref{txt:conclusion} concludes the work.
+The chapter \ref{txt:system_overview} presents the general information about the system and describes its operation in a big picture. The chapter \ref{txt:camera_unit} analyzes the devices which make up a camera unit (a core hardware component of the system) and presents the corresponding model. Next chapter \ref{txt:stationing_and_rectification} explains the necessity of finding the precise position and orientation of the whole camera station as well as evaluating the deviations between the camera unit model and its real construction. The chapter \ref{txt:detection_and_tracking} discuss the core computer vision components of the system, the detection and tracking. The chapter \ref{txt:implementation} goes through the implementation details and the final chapter \ref{txt:conclusion} concludes the work.
 
 
 %=========================================================================
@@ -59,13 +59,13 @@ The chapter \ref{txt:system_overview} presents the general information about the
 \chapter{System overview} \label{txt:system_overview}
 % 2 - 4 ns
 
-This section presents the main hardware building blocks of the OLS, the camera stations, and describes the basic pipeline which the system must perform in order to localize a given object. From the implementation point of view, the OLS is built on the ROS framework (see Section \ref{txt:implementation}) which present certain conventions, most importantly the orientation of the coordinate frame which will be used throughout the document (see Figure \ref{fig:frame_convention}).
+This section presents the main hardware building blocks of the OLS, the camera stations, and describes the basic pipeline which the system must follow in order to localize a given object. From the implementation point of view, the OLS is built on the ROS framework (see Section \ref{txt:implementation}) which presents certain conventions, most importantly the orientation of the coordinate frame which will be used throughout the document (see Figure \ref{fig:frame_convention}).
 
 %% ROS frame conventions
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=4cm]{fig/frame_convention.pdf}
-	\caption{A frame orientation convention used throughout the work, adopted from ROS. A right handed frame with X axis aiming forward, Y axis left and Z axis up.}
+	\caption{A frame orientation convention adopted from ROS which will be used throughout the work. A right handed coordinate system with X axis aiming forward, Y axis left and Z axis up.}
 	\label{fig:frame_convention}
 \end{figure}
 
@@ -73,13 +73,13 @@ This section presents the main hardware building blocks of the OLS, the camera s
 %-------------------------------------------------------------------------
 \section{Camera stations}
 
-The main building block of the OLS system is a \texttt{camera station} (CS). CS consists of the \texttt{camera unit} (CU), which is a collection of hardware necessary for capturing the images, manipulating the position of the camera and estimating the geographical coordinates of the CS (for detailed description see Section \ref{txt:camera_unit}), and the computation unit processing the data (a PC or other device). In general the OLS is designed to work with arbitrary number of CSs (of course there must be at least two units) and there are two types of CSs:
+The main building block of the OLS system is a \texttt{camera station} (CS). CS consists of the \texttt{camera unit} (CU), which is a collection of hardware necessary for capturing the images, manipulating the position of the camera and estimating the geographical coordinates of the CS (for detailed description see Section \ref{txt:camera_unit}), and the computation unit processing the data (a PC or other device). In general the OLS is designed to work with arbitrary number of CSs (of course there must be at least two stations) and there are two types of CSs:
 
 \paragraph{overview station} Only one of the CSs is selected to become the overview station. Its main objective is to scan the surrounding environment, discover the aerial objects, distribute the information to the tracking stations and prospectively take part in the tracking phase. The station dispose of the camera equipped with the zooming lens allowing for scanning greater distances and the PC serving the purpose of the main entry point for the human operator (see Section \ref{txt:hardware}).
 
 \paragraph{tracking station} All other stations become tracking stations which scan the surrounding environment, detect the aerial objects and perform tracking. All cameras ar equipped with the fixed focal length lenses. \\
 
-As for the network topology, the OLS is base don a star pattern where each tracking station communicates only with the overview station (see Section \ref{txt:hardware}). The positional organization of the CSs depends on the number of tracking stations, which should always be placed so that their positions projected to the horizontal plane would form a regular polygon with the overview unit in the middle (see Figure \ref{fig:system_overview}), however in more complex environments this condition does not have to strictly hold (see Figure \ref{fig:spilberk_camera_units}).
+As for the network topology, the OLS is based on a star pattern where each tracking station communicates only with the overview station (see Section \ref{txt:hardware}). The positional organization of the CSs depends on the number of tracking stations, which should always be placed so that their positions projected to the horizontal plane would form a regular polygon with the overview unit in the middle (see Figure \ref{fig:system_overview}), however in more complex environments this condition does not have to strictly hold (see Figure \ref{fig:spilberk_camera_units}).
 	
 %% Schema of camera units organized in triangle.
 %% Use case of camera units - placed on map of Brno's Spilberk
@@ -104,11 +104,11 @@ As for the network topology, the OLS is base don a star pattern where each track
 %-------------------------------------------------------------------------
 \section{System pipeline}
 
-Before the 3D location of the given target is estimated the system must perform several operations. After powering on the system all camera stations start scanning the surrounding environment. The scanning process is autonomous, however should the operator decide to interfere the overview unit (through the GUI and peripheral devices) is used in order to control the camera. 
+Before the 3D location of the given target is estimated the system must perform several operations. After powering on the system all camera stations start scanning the surrounding environment. The scanning process is autonomous, however, should the operator decide to interfere, the overview unit is used in order to control the camera (through the GUI and peripheral devices). 
 
 Once some of the stations detects an aerial object, it saves the visual information distinguishing the object and notifies the overview station. The overview station selects the the best candidate(s) to track the newly discovered object and notifies the chosen unit with the essential data about the object (direction in which it was spotted, visual clues, global id, etc.).
 
-The other unit(s) must first detect the newly spotted object. If it succeeds it initiates the tracking. The overview unit then performs the triangulation and estimates the 3D location of the target.
+The other unit(s) must first detect the newly spotted object. If it succeeds it initiates the tracking. The overview unit then computes the triangulation and estimates the 3D location of the target.
 
 
 %=========================================================================
@@ -116,7 +116,7 @@ The other unit(s) must first detect the newly spotted object. If it succeeds it 
 \chapter{Camera unit} \label{txt:camera_unit}
 % 2 - 4 ns
 
-A camera unit is a component of a camera station consisting of a hardware necessary to estimate the absolute geographical position of a station, absolute orientation, relative position and orientation with regards to the rest of the stations and a hardware for positioning a camera and capturing an image stream (more in Section \ref{txt:devices}). A 3D location of a camera as well as the direction of the optical axis must be known for each captured frame, thus a model corresponding to the real hardware must be designed (see Section \ref{txt:model}).
+A camera unit is one component of a camera station and it consists of a hardware necessary to estimate the absolute geographical position of a station, absolute orientation, relative position and orientation with regards to the rest of the stations and a hardware for positioning a camera and capturing an image stream (more in Section \ref{txt:devices}). A 3D location of a camera as well as the direction of the optical axis must be known for each captured frame, thus a model corresponding to the real hardware must be designed (see Section \ref{txt:model}).
 
 %-------------------------------------------------------------------------
 %-------------------------------------------------------------------------
@@ -132,9 +132,9 @@ A camera unit (see Figure \ref{fig:camera_unit_photo_model}) consists of a surve
 	\label{fig:camera_unit_photo_model}
 \end{figure}
 
-\paragraph{manipulator Flir PTU-D46-70} A professional manipulator PTU-D46-70\footnote{A website of product Flir PTU-D46-70: \url{http://www.flir.com/mcs/view/?id=53712}} produced by a well established manufacturer Flir is used (see Figure \ref{fig:prosilica_gt1290c_flir_ptud4670}). As compared to the other professional manipulators this is an entry level device consisting of two stepper motors (pan and tilt axes). the device is capable of maximum angular speed of $60^{\circ}/s$ with the resolution of $0.003^{\circ}$ while the payload must not exceed 4.08 kg \cite{Flir_ptud4670}. The operational range is limited to $[-180^{\circ}, 180^{\circ}]$ in azimuth and $[-47^{\circ}, 80^{\circ}]$ in elevation. The manipulator incorporates no position feedback, the position is inferred from the number of steps and the current resolution, thus it is necessary not to overload the manipulator, otherwise it could loose synchrony and report wrong position. 
+\paragraph{manipulator Flir PTU-D46-70} A professional manipulator PTU-D46-70\footnote{A website of product Flir PTU-D46-70: \url{http://www.flir.com/mcs/view/?id=53712}} produced by a well established manufacturer Flir is used (see Figure \ref{fig:prosilica_gt1290c_flir_ptud4670}). As compared to the other professional manipulators this is an entry level device consisting of two stepper motors (pan and tilt axes). The device is capable of maximum angular speed of $60^{\circ}/s$ with the resolution of $0.003^{\circ}$ while the payload must not exceed 4.08 kg \cite{Flir_ptud4670}. The operational range is limited to $[-180^{\circ}, 180^{\circ}]$ in azimuth and $[-47^{\circ}, 80^{\circ}]$ in elevation. The manipulator incorporates no position feedback, the position is inferred from the number of steps and the current resolution, thus it is necessary not to overload the manipulator, otherwise it could loose synchrony and report wrong position. 
 
-\paragraph{camera Prosilica GT 1290C} A camera Prosilica GT 1290C\footnote{A website of product Prosilica GT 1290C: \url{https://www.alliedvision.com/en/products/cameras/detail/1290-1.html}} is an industrial camera manufactured by the company Allied Vision (see Figure \ref{fig:prosilica_gt1290c_flir_ptud4670}). It is a color camera equipped with CCD sensor (type 1/3'') with the resolution of $1280 \times 960$ px and support for $33.3$ FP and it communicates through gigabit Ethernet \cite{Prosilica_gt1290c}. What is important the camera natively supports the PTP protocol for precise time synchronization which is a crucial feature in each application relying on stereo vision as it is capable of time synchronization devices within the range of nanoseconds \cite{PTP}.
+\paragraph{camera Prosilica GT 1290C} A camera Prosilica GT 1290C\footnote{A website of product Prosilica GT 1290C: \url{https://www.alliedvision.com/en/products/cameras/detail/1290-1.html}} is an industrial camera manufactured by the company Allied Vision (see Figure \ref{fig:prosilica_gt1290c_flir_ptud4670}). It is a color camera equipped with CCD sensor (type 1/3'') with the resolution of $1280 \times 960$ px and support for $33.3$ FPS and it communicates through gigabit Ethernet \cite{Prosilica_gt1290c}. What is important the camera natively supports the PTP protocol for precise time synchronization which is a crucial feature in each application relying on stereo vision as it is capable of time synchronization among devices within the range of nanoseconds \cite{PTP}.
 
 %% Photos of Flir and Prosilica.
 \begin{figure}[htb]
@@ -148,7 +148,7 @@ A camera unit (see Figure \ref{fig:camera_unit_photo_model}) consists of a surve
 %-------------------------------------------------------------------------
 \section{Model} \label{txt:model}
 
-A camera unit model is based on the kinematic chain consisting of six joints and five links corresponding to the distance between the separate part of the tripod and the manipulator (see Figure \ref{fig:camera_unit_kinematic_chain}). The starting joint \texttt{ground} itself is dependent on the reference location (let's call it \texttt{world}) which represents the origin of the global coordinate frame. The transformation between the \texttt{world} and \texttt{ground} reflects the positioning and heading of the given manipulator within the environment (which is estimated during the stationing process, see Section \ref{txt:stationing_and_rectification}).
+A camera unit model is based on the kinematic chain consisting of six joints and five links corresponding to the distance between separate parts of the tripod and separate parts of the manipulator (see Figure \ref{fig:camera_unit_kinematic_chain}). The starting joint \texttt{ground} itself is dependent on the reference location (let's call it \texttt{world}) which represents the origin of the global coordinate frame. The transformation between the \texttt{world} and \texttt{ground} reflects the positioning and heading of the given manipulator within the environment (which is estimated during the stationing process, see Section \ref{txt:stationing_and_rectification}).
 
 The kinematic chain is designed as the composition of transformation matrices where a single joint can be located by applying the Euclidean transformation on the position of the joint it is dependent on. For instance the transformation matrix $M_{cam}$ of the joint \texttt{camera} can be derived as:
 
@@ -162,43 +162,43 @@ where $M_{ele}$ is the transformation matrix of the joint \texttt{ele} which the
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=14cm]{fig/camera_unit_kinematic_chain.pdf}
-	\caption{A schematic view of a kinematic chain of a camera unit with the joints depicted by the yellow circles with black crosses. The sizes of all components necessary to specify the translation matrices between consecutive joints are shown as well. Note that this is a rear view, i.e. the optical axis of the camera is seen from behind. Thus the joints \texttt{camera} and \texttt{focus} overlap as they both lie on the optical axis.}
+	\caption{A schematic view of a kinematic chain of a camera unit with the joints depicted by the yellow circles with black crosses. The sizes of all components necessary to specify the translation matrices between consecutive joints are shown as well. Note that this is a rear view, i.e. the camera is seen from behind. Thus the joints \texttt{camera} and \texttt{focus} overlap as they both lie on the optical axis (the joint \texttt{focus} has lower value of Z coordinate).}
 	\label{fig:camera_unit_kinematic_chain}
 \end{figure}
 
 
 %=========================================================================
 %=========================================================================
-\chapter{Sensitivity analysis} \label{txt:sensitivity_analysis}
-The precision of the system can be defined in the means of the frame-by-frame Euclidean distance between the estimated location and the real (ground truth) location of the given target. The precision is impacted by multiple independent factors, thus it is essential to perform the sensitivity analysis in order to discover and prospectively alleviate the most prominent contributors of the overall error. 
-
-- vysvetleni typu chyb:
-	- system error (systemova chyba)
-		- nesoulad modelu CU s realnou konstrukci
-		- nespravne mereni heading
-		- detekce a tracking ?
-	- uncertainty of the input of the system
-		- GPS mereni
-		- data inklinometru
-	
-- vysvetlit, ze se budeme snazit potlacit jen nektere chyby (neresime treba nepresnost mezi modelem a realnou CU z hledsiak translaci mezi klouby)
-
-- rozdeleni na chybu rotace a translace
-	- nepresnost v rotaci je daleko zavaznejsi, nez nepresnost v translaci
-	- priklad a obrazek vlivu nepresnosti o x mrad na lokalizaci cile ve vzdalenosti y m/km
-
-- zdroj chyb:
-	- detekce
-	- tracking
-	- GPS pozice
-	- natoceni vuci severu
-	- rozliseni PTU
-	- model PTU - translace mezi klouby
-	- model PTU - rotace mezi klouby
-	- uchyceni kamery
-		- rotace podle opticke osy
-		- rotace podle osy azimutu
-		- rotace podle osy elevace
+%\chapter{Sensitivity analysis} \label{txt:sensitivity_analysis}
+%The precision of the system can be defined in the means of the frame-by-frame Euclidean distance between the estimated location and the real (ground truth) location of the given target. The precision is impacted by multiple independent factors, thus it is essential to perform the sensitivity analysis in order to discover and prospectively alleviate the most prominent contributors of the overall error. 
+%
+%- vysvetleni typu chyb:
+%	- system error (systemova chyba)
+%		- nesoulad modelu CU s realnou konstrukci
+%		- nespravne mereni heading
+%		- detekce a tracking ?
+%	- uncertainty of the input of the system
+%		- GPS mereni
+%		- data inklinometru
+%	
+%- vysvetlit, ze se budeme snazit potlacit jen nektere chyby (neresime treba nepresnost mezi modelem a realnou CU z hledsiak translaci mezi klouby)
+%
+%- rozdeleni na chybu rotace a translace
+%	- nepresnost v rotaci je daleko zavaznejsi, nez nepresnost v translaci
+%	- priklad a obrazek vlivu nepresnosti o x mrad na lokalizaci cile ve vzdalenosti y m/km
+%
+%- zdroj chyb:
+%	- detekce
+%	- tracking
+%	- GPS pozice
+%	- natoceni vuci severu
+%	- rozliseni PTU
+%	- model PTU - translace mezi klouby
+%	- model PTU - rotace mezi klouby
+%	- uchyceni kamery
+%		- rotace podle opticke osy
+%		- rotace podle osy azimutu
+%		- rotace podle osy elevace
 		
 %- vysvetleni input a output systemu a pojmu sensitivity analysis (http://samples.sainsburysebooks.co.uk/9780470725177_sample_389211.pdf)
 
@@ -207,7 +207,7 @@ The precision of the system can be defined in the means of the frame-by-frame Eu
 \chapter{Stationing and rectification} \label{txt:stationing_and_rectification}
 % 2,5 - 3,5 ns
 
-As explained in section \ref{txt:sensitivity_analysis} the precision of the whole system is dependent on on the uncertainty of the system input as well as on the imprecision of the camera unit construction. The process of stationing aims to alleviate the uncertainty of the system input while the main purpose of the rectification is to reduce the difference between the real camera unit and its model.
+The precision of the whole system is dependent on the uncertainty of the system input as well as on the imprecision of the camera unit construction. The process of stationing aims to alleviate the uncertainty of the system input while the main purpose of the rectification is to reduce the difference between the real camera unit and its model.
 
 %-------------------------------------------------------------------------
 %-------------------------------------------------------------------------
@@ -219,17 +219,17 @@ Since the stationing is considered to be already working subsystem of the whole 
 %.........................................................................
 \subsection{Geographical north} \label{txt:geographical_north}
 
-Though it is common practice to estimate the heading\footnote{Heading is the term used to describe the angle between the torso of the human body and the geographical north \cite{Henriksson648760}} using the magnetometer, this device is unsuitable for this project since the accuracy of the concurrent professional class magnetometers is insufficient (see Section \ref{txt:sensitivity_analysis}). For instance the accuracy of the magnetometers meant for compassing applications produced by Honeywell, the multinational company focusing on aerospace systems, range from hundreds to thousands of milliradians \cite{Honeywell:compassing_catalog}.
+Though it is common practice to estimate the heading\footnote{Heading is the term used to describe the angle between the torso of the human body and the geographical north \cite{Henriksson648760}} using the magnetometer, this device is unsuitable for this project since the accuracy of the concurrent professional class magnetometers is insufficient. For instance the accuracy of the magnetometers meant for compassing applications produced by Honeywell, the multinational company focusing on aerospace systems, range from hundreds to thousands of milliradians \cite{Honeywell:compassing_catalog}.
 
 In order to find the orientation of each camera unit placed in the outdoor environment, distinctive landmarks (created either by human or nature) with known geographical positions are used. For each such a landmark the manipulator is rotated so that the optical axis of the camera would intersect that landmark and both the azimuth and elevation value is registered. Using triangulation the geographical position of the camera unit is derived. 
 
-Different possible approach takes advantage of the celestial objects, such as the moon, sun or stars for which the current geographical position is known as well. Nevertheless this approach can only be used between the sunset and the dawn.
+A different possible approach takes advantage of the celestial objects, such as the moon, sun or stars for which the current geographical position is known as well. Nevertheless this approach can only be used between the sunset and the dawn.
 
 %.........................................................................
 %.........................................................................
 \subsection{Relative azimuth and elevation}
 
-To further reduce the impact of the uncertainty of the system input produced by the GPS (see Section \ref{txt:sensitivity_analysis}) and the system error given by the imprecision of the heading estimation (see Section \ref{txt:geographical_north}) it is convenient to find the relative position of each camera unit with regards to the rest of the camera units.
+To further reduce the impact of the uncertainty of the system input produced by the GPS and the system error given by the imprecision of the heading estimation (see Section \ref{txt:geographical_north}) it is convenient to find the relative position of each camera unit with regards to the rest of the camera units.
 
 The information about the geographical position of all camera units as obtained from the GPS sensors is distributed across the whole system. Each pair of camera units then automatically performs the following:
 
@@ -242,7 +242,7 @@ The information about the geographical position of all camera units as obtained 
 %% Stationing process of one pair of the camera units
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=14cm]{fig/stationing_aiming.png}
+	\includegraphics[width=8cm]{fig/stationing_aiming.png}
 	\caption{The schema of stationing process where two camera units attempt to align the optical axes of their cameras so that they would intersect the LED target of the other unit.}
 	\label{fig:stationing_aiming}
 \end{figure}
@@ -272,8 +272,8 @@ A custom made metal mount is attached to the bottom side of the camera. The moun
 %% The front view of the model of the camera unit
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=13cm]{fig/rect_model_front_view.png}
-	\caption{Front view of the top part of the camera unit. The red arrow shows the possible rotation of the camera along the axis parallel to the optical axis.}
+	\includegraphics[width=10cm]{fig/rect_model_front_view.png}
+	\caption{Front view of the top part of the camera unit. The red arrow shows the possible rotation of the camera along the axis parallel to the optical axis. The Figure is adopted from company Oprox, a.s.}
 	\label{fig:rect_model_front_view}
 \end{figure}
 
@@ -282,7 +282,7 @@ In this part the rectification target with three parallel horizontal black lines
 %% Rectification of the rows of the camera image sensor - original stream blended with the mirrored stream
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=13cm]{fig/rect_mirrored_stream.png}
+	\includegraphics[width=12cm]{fig/rect_mirrored_stream.png}
 	\caption{A blended image stream from the camera before (left) and after (right) rotating the camera along the optical axis to the correct position.}
 	\label{fig:rect_mirrored_stream}
 \end{figure}
@@ -296,8 +296,8 @@ The mount can still rotate along the axis parallel to the azimuthal axis (see Fi
 %% The top view of the model of the camera unit
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=13cm]{fig/rect_model_top_view.png}
-	\caption{Top view of the top part of the camera unit. The red arrow shows the possible rotation of the camera along the axis parallel to the azimuthal axis.}
+	\includegraphics[width=11cm]{fig/rect_model_top_view.png}
+	\caption{Top view of the top part of the camera unit. The red arrow shows the possible rotation of the camera along the axis parallel to the azimuthal axis. The Figure is adopted from company Oprox, a.s.}
 	\label{fig:rect_model_top_view}
 \end{figure}
 
@@ -307,16 +307,16 @@ The same target from the first part of the rectification is used, but two black 
 %% Screenshot of the digital crosshair and the offset
 \begin{figure}[htb]
 	\centering
-	\begin{minipage}{.42\textwidth}
+	\begin{minipage}{.37\textwidth}
 		\centering
 		\includegraphics[width=.99\linewidth]{fig/rect_telescope.png}
-		\captionof{figure}{A telescope mounted on top of the manipulator. A person looking through a telescope sees a crosshair - a tip of a triangle.}
+		\captionof{figure}{A telescope mounted on top of the manipulator. A person looking through a telescope sees a crosshair.}
 		\label{fig:rect_telescope}
 	\end{minipage}
 	\hfill
-	\begin{minipage}{.54\textwidth}
+	\begin{minipage}{.59\textwidth}
 		\centering
-		\includegraphics[width=.99\linewidth]{fig/rect_azi_axis.png}
+		\includegraphics[width=.99\linewidth]{fig/rect_azi_axis.pdf}
 		\captionof{figure}{Rectification target with the pairs of black crosses. The two crosses in a pair are $d_{ao}\ m$ appart. A digital corsshair is displayed in order to find the horizontal offset $d_{h}$.}
 		\label{fig:rect_azi_axis}
 	\end{minipage}
@@ -350,7 +350,7 @@ For this purpose a pair of rectification targets, which consist of vertical blac
 %% The rectification target for finding the default elevation angle.
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=13cm]{fig/rect_default_elevation_angle.png}
+	\includegraphics[width=13cm]{fig/rect_default_elevation_angle.pdf}
 	\caption{Front target of a pair of the rectification targets used to find a default elevation angle (left). A screenshot from the image stream of the camera with the crosshair focused on a row where the marks of the rulers align (right).}
 	\label{fig:rect_default_elevation_angle}
 \end{figure}
@@ -360,6 +360,8 @@ For this purpose a pair of rectification targets, which consist of vertical blac
 %=========================================================================
 \chapter{Detection and tracking} \label{txt:detection_and_tracking}
 % 4,5 - 9 ns
+
+This section discusses the various approaches for detection and tracking of the objects using the computer vision techniques. First the importance of the suitable object representation is explained, then the detection and tracking algorithms are described.
 
 %-------------------------------------------------------------------------
 %-------------------------------------------------------------------------
@@ -441,36 +443,26 @@ The object itself is modeled as a set of patches, each patch being already learn
 
 %=========================================================================
 %=========================================================================
-\chapter{Cooperation among camera units}
-% 1 - 4 ns
-
-- vyber druhe jednotky pro trackovani cile
-- najezd po opticke ose
-- predani cile
-
-
-%=========================================================================
-%=========================================================================
-\chapter{Target localization} \label{txt:target_localization}
-% 2,5 - 6 ns
-
-- triangulace
-- === LOKALIZACE OBJEKTU VE VICEKAMEROVYCH SYSTEMECH ===
-- === ALGORITMY VHODNE PRO RESENI ULOHY ===
-
-- Cameras are modeled as pinhole cameras. This is a simple model that describes the mathematical
-relationship between the coordinates of a 3D point in the camera coordinate system and its
-projection onto the image plane in an ideal camera without lenses through the expressions in 
-
-== (obrazek z rvizu (protnuti primek) ==
-
- Given  the  extrinsic  and  intrinsic  camera 
- parameters,  each  image  point  defines  a  ray  in  three 
- dimensional spaces, and in the absence of measurement errors, 
- all  rays  from  different  cameras  intersect  in  the  same  object 
- point. But actually the four rays may not intersect in the same 
- point  due  to  the  low-quality  video  cameras  and  other 
- complicated  reasons.
+%\chapter{Target localization} \label{txt:target_localization}
+%% 2,5 - 6 ns
+%
+%- triangulace
+%- === LOKALIZACE OBJEKTU VE VICEKAMEROVYCH SYSTEMECH ===
+%- === ALGORITMY VHODNE PRO RESENI ULOHY ===
+%
+%- Cameras are modeled as pinhole cameras. This is a simple model that describes the mathematical
+%relationship between the coordinates of a 3D point in the camera coordinate system and its
+%projection onto the image plane in an ideal camera without lenses through the expressions in 
+%
+%== (obrazek z rvizu (protnuti primek) ==
+%
+% Given  the  extrinsic  and  intrinsic  camera 
+% parameters,  each  image  point  defines  a  ray  in  three 
+% dimensional spaces, and in the absence of measurement errors, 
+% all  rays  from  different  cameras  intersect  in  the  same  object 
+% point. But actually the four rays may not intersect in the same 
+% point  due  to  the  low-quality  video  cameras  and  other 
+% complicated  reasons.
  
 
 

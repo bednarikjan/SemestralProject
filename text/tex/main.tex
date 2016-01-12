@@ -79,7 +79,7 @@
   department=UPGM, % doplnte prislusnou zkratku: UPSY/UIFS/UITS/UPGM
   %Skolitel
   supervisor= Adam Herout, %jmeno prijmeni skolitele
-  supervisor.title.p=doc. Ing.,   %titul pred jmenem (nepovinne)
+  supervisor.title.p=prof. Ing.,   %titul pred jmenem (nepovinne)
   supervisor.title.a={Ph.D.},    %titul za jmenem (nepovinne)
   %Klicova slova, abstrakty, prohlaseni a podekovani je mozne definovat 
   %bud pomoci nasledujicich parametru nebo pomoci vyhrazenych maker (viz dale)
@@ -97,17 +97,17 @@
 }
 
 %Abstrakt (cesky, anglicky)
-%\abstract[cs]{Do tohoto odstavce bude zapsán výtah (abstrakt) práce v českém jazyce.}
-%\abstract[en]{Do tohoto odstavce bude zapsán výtah (abstrakt) práce v anglickém jazyce.}
+\abstract[cs]{Tato práce popisuje návrh pasivního systému pro optickou lokalizaci leteckých objektů ve vícekamerovém systému schopném autonomně určit globální geografickou pozici sledovaného objektu. Systém staví na využití několik stanic s pozicovatelnými kamerami, přičemž jsou stanice vhodně rozmístěny v daném prostředí. Každá kamerová jednotka provádí detekci a sledování a zasílá data ostatním jednotkám, díky čemuž je možné triangulovat pozici sledovaného objektu. V práci je popsán navržený model kamerové jednotky, rovněž je vysvětlen a proveden proces rektifikace, jehož účelem je redukovat odchylku mezi modelem a reálnou konstrukcí kamerové jednotky. Diskutovány jsou rovněž různé techniky pro vizuální detekci a sledování objektů a jsou vybrány nejvhodnější z nich z hlediska potřeb navrhovaného systému. Dále je popsán návrh, částečná implementace a simulace systému ve fyzikálním simulátoru. V závěru jsou shrnuty další kroky nezbytné pro úspěšný vývoj systému.}
+\abstract[en]{This work presents the passive multi camera optical localization system suitable for autonomous estimation of the global geographical position of the aerial objects. The system utilizes multiple stations with positionable cameras properly placed within the environment. Each camera unit performs detection and tracking and exchanges the information with each other in order to triangulate the target. In the work the proposed model of the camera unit was described a rectification process reducing the deviation between the model and the construction of the unit was described and performed. Various visual detection and tracking approaches were discussed and the most suitable ones were proposed for the final solution. The system was designed, partially implemented and simulated in a physical simulator. The next steps necessary for the successful development of the system were eventually summarized.}
 
 %Klicova slova (cesky, anglicky)
-%\keywords[cs]{Sem budou zapsána jednotlivá klíčová slova v českém jazyce, oddělená čárkami.}
-%\keywords[en]{Sem budou zapsána jednotlivá klíčová slova v anglickém jazyce, oddělená čárkami.}
+\keywords[cs]{optická lokalizace, lokalizace více kamerami, stereovize, detekce objektů, sledování objektů, triangulace, letecké objekty, UAV, fyzikální simuace, ROS, Gazebo, kinematický řetězec, rektifikace kamery}
+\keywords[en]{optical localization, mutli camera localization, stereovision, object detection, object tracking, triangulation, aerial objects, UAV, physcial simulation, ROS, Gazebo, kinematic chain, camera rectification}
 
 %Prohlaseni
-%\declaration{Prohlašuji, že jsem tuto bakalářskou práci vypracoval samostatně pod vedením pana X...
+\declaration{Prohlašuji, že jsem tuto bakalářskou práci vypracoval samostatně pod vedením pana prof. Ing. Adama Herouta Ph.D.
 %Další informace mi poskytli...
-%Uvedl jsem všechny literární prameny a publikace, ze kterých jsem čerpal.}
+Uvedl jsem všechny literární prameny a publikace, ze kterých jsem čerpal.}
 
 %Podekovani (nepovinne)
 %\acknowledgment{V této sekci je možno uvést poděkování vedoucímu práce a těm, kteří poskytli odbornou pomoc
