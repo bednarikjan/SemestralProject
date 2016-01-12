@@ -16,11 +16,11 @@
 
 In todays world the localization of the aerial objects is an essential component of two main domains, a public air traffic control (ATC) and a national defense. In both cases the main purpose of the system is to estimate a distance and a 3D position of the given airborne vehicle.
 
-In case of the ATC the airports mainly rely on the multilateration systems which specialize on surveillance and control of air traffic during all flight phases \cite{Gaviria:newStrategiesMLAT}. The design of such a system expects that the aircrafts are equipped with a secondary surveillance radar transponders which periodically emit the signals to the ground receiving stations, however primary radars are widely used as well \cite{Airtrafficmuseum}. In military segment the aerial object localization mainly serves the purpose of detecting and identifying the intruder which might pose a threat for a given area under protection. In this scenario only primary radars are be used since the aerial object is not expected to cooperate.
+In case of the ATC the airports mainly rely on the multilateration systems which specialize on surveillance and control of air traffic during all flight phases \cite{Gaviria:newStrategiesMLAT}. The design of such a system expects that the aircrafts are equipped with a secondary surveillance radar transponders which periodically emit the signals to the ground receiving stations, however primary radars are widely used as well \cite{Airtrafficmuseum}. In military segment the aerial object localization mainly serves the purpose of detecting and identifying the intruder which might pose a threat for a given area under protection. In this scenario only primary radars are used since the aerial objects are not expected to cooperate.
 
-Even though being widely used a radar based localization systems suffer from a several drawbacks. A radar is a device based on the active emission of the radio signal \cite{toomay2012radar}. In order to localize distant objects a huge amount of energy must be radiated to make sure it would return from the target and a small amount of energy returned might be easily disrupted \cite{Airtrafficmuseum}. What is more in defense applications it is not desirable that the tracked object would find out it is being tracked, which is the condition an actively radiating system such as a radar cannot achieve. Last but not least the professional class radars in use by both airports and military are in general expensive, large and heavy devices not suitable for mobile deployment.
+Even though being widely used, a radar based localization systems suffer from a several drawbacks. A radar is a device based on the active emission of the radio signal \cite{toomay2012radar}. In order to localize distant objects a huge amount of energy must be radiated to make sure it would return from the target and a small amount of energy returned might be easily disrupted \cite{Airtrafficmuseum}. What is more in defense applications it is not desirable that the tracked object would find out that it is being tracked, which is the condition an actively radiating system, such as a radar, cannot achieve. Last but not least, the professional class radars in use by both public segment and military are in general expensive, large and heavy devices not suitable for mobile deployment.
 
-In this work I propose a fully autonomous passive multi camera system for detecting, tracking and localizing aerial objects which is based merely on ordinary RGB cameras, an Optical Localization System (OLS). Since the system does not rely on active emission of a signal, but rather captures the optical information from the environment it can be used for secret localization of aerial targets. The system is designed to be well suited for mobility and temporary deployment since each camera station used weigh no more than twenty kilograms and the whole system is relatively inexpensive as well.
+In this work I propose a fully autonomous passive multi camera system for detecting, tracking and localizing aerial objects which is based merely on ordinary RGB cameras - the Optical Localization System (OLS). Since the system does not rely on active emission of a signal, but rather captures the optical information from the environment, it can be used for secret localization of aerial targets. The system is designed to be well suited for mobility and temporary deployment since each camera station used weigh no more than twenty kilograms and the whole system is relatively inexpensive as well.
 
 
 %-------------------------------------------------------------------------
@@ -41,7 +41,7 @@ The professional systems aiming on automatic localization of aerial (as well as 
 
 On the other hand since the application of multiple view geometry has been one of hot topics in the computer vision during the past decade, many R\&D groups (specializing mostly on robotics) attempt to base their solutions on multi camera optical localization.
 
-One of a widely used approaches is to set up so called \textit{intelligent space}\cite{intelligentSpace}, the bounded area under surveillance of multiple cameras reporting to the the central system. In \cite{Multi-Camera_Sensor_System_for_3D_Segmentation} multiple terrestrial robots are detected, tracked and localized by the multi camera system. For all cameras the intrinsics and extrinsics are known beforehand and do not change over time.  A similar approach is used also in \cite{Localization_and_Geometric_Reconstruction_of_Mobile_Robots} but this system uses the robot's odometers as well in order to improve the resulting position estimated by the optical system. The system presented in \cite{A_3D_visual_localization} then relies on four ordinary RGB cameras with known parameters (intrisics, extrinsics) to estimate the position of the easy to detect and static object using the Perpendicular Foot Method algorithm.
+One of a widely used approaches is to set up so called \textit{intelligent space}\cite{intelligentSpace}, the bounded area under surveillance of multiple cameras reporting to the the central system. In \cite{Multi-Camera_Sensor_System_for_3D_Segmentation} multiple terrestrial robots are detected, tracked and localized by the multi camera system. For all cameras the intrinsics and extrinsics are known beforehand and do not change over time.  A similar approach is used also in \cite{Localization_and_Geometric_Reconstruction_of_Mobile_Robots} but this system uses the robot's odometers as well in order to improve the resulting position estimated by the optical system. The system presented in \cite{A_3D_visual_localization} then relies on four ordinary RGB cameras with known parameters (intrinsics, extrinsics) to estimate the position of the easy to detect and static object using the Perpendicular Foot Method algorithm.
 
 Even though all of the aforementioned approaches utilize the ordinary RGB cameras for detection and tracking and in general estimate the location of the object using the triangulation algorithm, they all assume the object moves strictly within the specified bounded region and they rely on fixed positions of the cameras. Thus they do not have to deal with the imprecisions arose from the uncertainty of the current camera pose estimation and with the problems of handing off the target to other camera units once a target moves out of the operational range of the given camera. 
 
@@ -51,7 +51,7 @@ As for the detection and tracking of the distant aerial targets, one of the most
 %-------------------------------------------------------------------------
 \section{Thesis organization}
 
-The chapter \ref{txt:system_overview} presents the general information about the system and describes its operation in a big picture. The chapter \ref{txt:camera_unit} analyzes the devices which make up a camera unit (a core hardware component of the system) and presents the corresponding model. Next chapter \ref{txt:stationing_and_rectification} explains the necessity of finding the precise position and orientation of the whole camera station as well as evaluating the deviations between the camera unit model and its real construction. The chapter \ref{txt:detection_and_tracking} discuss the core computer vision components of the system, the detection and tracking. The chapter \ref{txt:implementation} goes through the implementation details and the final chapter \ref{txt:conclusion} concludes the work.
+The chapter \ref{txt:system_overview} presents the general information about the system and describes its operation in a big picture. The chapter \ref{txt:camera_unit} analyzes the devices which make up a camera unit (a core hardware component of the system) and presents the corresponding model. The next chapter~\ref{txt:stationing_and_rectification} explains the necessity of finding the precise position and orientation of the whole camera station as well as evaluating the deviations between the camera unit model and its real construction. The chapter \ref{txt:detection_and_tracking} discusses the core computer vision components of the system, the detection and tracking. The chapter \ref{txt:implementation} goes through the implementation details and the final chapter \ref{txt:conclusion} concludes the work.
 
 
 %=========================================================================
@@ -75,7 +75,7 @@ This section presents the main hardware building blocks of the OLS, the camera s
 
 The main building block of the OLS system is a \texttt{camera station} (CS). CS consists of the \texttt{camera unit} (CU), which is a collection of hardware necessary for capturing the images, manipulating the position of the camera and estimating the geographical coordinates of the CS (for detailed description see Section \ref{txt:camera_unit}), and the computation unit processing the data (a PC or other device). In general the OLS is designed to work with arbitrary number of CSs (of course there must be at least two stations) and there are two types of CSs:
 
-\paragraph{overview station} Only one of the CSs is selected to become the overview station. Its main objective is to scan the surrounding environment, discover the aerial objects, distribute the information to the tracking stations and prospectively take part in the tracking phase. The station dispose of the camera equipped with the zooming lens allowing for scanning greater distances and the PC serving the purpose of the main entry point for the human operator (see Section \ref{txt:hardware}).
+\paragraph{overview station} Only one of the CSs is selected to become the overview station. Its main objective is to scan the surrounding environment, discover the aerial objects, distribute the information to the tracking stations and prospectively take part in the tracking phase. The station disposes of the camera equipped with the zooming lens allowing for scanning greater distances and the PC serving the purpose of the main entry point for the human operator (see Section \ref{txt:hardware}).
 
 \paragraph{tracking station} All other stations become tracking stations which scan the surrounding environment, detect the aerial objects and perform tracking. All cameras ar equipped with the fixed focal length lenses. \\
 
@@ -106,7 +106,7 @@ As for the network topology, the OLS is based on a star pattern where each track
 
 Before the 3D location of the given target is estimated the system must perform several operations. After powering on the system all camera stations start scanning the surrounding environment. The scanning process is autonomous, however, should the operator decide to interfere, the overview unit is used in order to control the camera (through the GUI and peripheral devices). 
 
-Once some of the stations detects an aerial object, it saves the visual information distinguishing the object and notifies the overview station. The overview station selects the the best candidate(s) to track the newly discovered object and notifies the chosen unit with the essential data about the object (direction in which it was spotted, visual clues, global id, etc.).
+Once any of the stations detects an aerial object, it saves the visual information distinguishing the object and notifies the overview station. The overview station selects the best candidate(s) to track the newly discovered object and notifies the chosen unit with the essential data about the object (direction in which it was spotted, visual clues, global id, etc.).
 
 The other unit(s) must first detect the newly spotted object. If it succeeds it initiates the tracking. The overview unit then computes the triangulation and estimates the 3D location of the target.
 
@@ -134,7 +134,7 @@ A camera unit (see Figure \ref{fig:camera_unit_photo_model}) consists of a surve
 
 \paragraph{manipulator Flir PTU-D46-70} A professional manipulator PTU-D46-70\footnote{A website of product Flir PTU-D46-70: \url{http://www.flir.com/mcs/view/?id=53712}} produced by a well established manufacturer Flir is used (see Figure \ref{fig:prosilica_gt1290c_flir_ptud4670}). As compared to the other professional manipulators this is an entry level device consisting of two stepper motors (pan and tilt axes). The device is capable of maximum angular speed of $60^{\circ}/s$ with the resolution of $0.003^{\circ}$ while the payload must not exceed 4.08 kg \cite{Flir_ptud4670}. The operational range is limited to $[-180^{\circ}, 180^{\circ}]$ in azimuth and $[-47^{\circ}, 80^{\circ}]$ in elevation. The manipulator incorporates no position feedback, the position is inferred from the number of steps and the current resolution, thus it is necessary not to overload the manipulator, otherwise it could loose synchrony and report wrong position. 
 
-\paragraph{camera Prosilica GT 1290C} A camera Prosilica GT 1290C\footnote{A website of product Prosilica GT 1290C: \url{https://www.alliedvision.com/en/products/cameras/detail/1290-1.html}} is an industrial camera manufactured by the company Allied Vision (see Figure \ref{fig:prosilica_gt1290c_flir_ptud4670}). It is a color camera equipped with CCD sensor (type 1/3'') with the resolution of $1280 \times 960$ px and support for $33.3$ FPS and it communicates through gigabit Ethernet \cite{Prosilica_gt1290c}. What is important the camera natively supports the PTP protocol for precise time synchronization which is a crucial feature in each application relying on stereo vision as it is capable of time synchronization among devices within the range of nanoseconds \cite{PTP}.
+\paragraph{camera Prosilica GT 1290C} A camera Prosilica GT 1290C\footnote{A website of product Prosilica GT 1290C: \url{https://www.alliedvision.com/en/products/cameras/detail/1290-1.html}} is an industrial camera manufactured by the company Allied Vision (see Figure \ref{fig:prosilica_gt1290c_flir_ptud4670}). It is a color camera equipped with CCD sensor (type 1/3'') with the resolution of $1280 \times 960$ px and support for $33.3$ FPS and it communicates through gigabit Ethernet \cite{Prosilica_gt1290c}. What is important, the camera natively supports the PTP protocol for precise time synchronization which is a crucial feature in each application relying on stereo vision as it is capable of time synchronization among devices within the range of nanoseconds \cite{PTP}.
 
 %% Photos of Flir and Prosilica.
 \begin{figure}[htb]
@@ -156,7 +156,7 @@ The kinematic chain is designed as the composition of transformation matrices wh
 M_{cam} = M_{ele}T_{cam}R_{Z_{cam}}R_{X_{cam}}R_{Y_{cam}},
 \end{equation}
 
-where $M_{ele}$ is the transformation matrix of the joint \texttt{ele} which the joint \texttt{camera} is dependent on. 
+where $M_{ele}$ is the transformation matrix of the joint \texttt{ele} which the joint \texttt{camera} is dependent on, and $T_{cam}$ and $R_{AXIS_{cam}}$ are transformation and rotation matrices describing transformation from the joint \texttt{ele} to the joint \texttt{camera}. 
 
 %% A schema of the camera unit - kinematic chain.
 \begin{figure}[htb]
@@ -322,7 +322,7 @@ The same target from the first part of the rectification is used, but two black 
 	\end{minipage}
 \end{figure}
 
-A military optical monocular telescope (see Figure \ref{fig:rect_telescope}) is mounted on top of the manipulator. The optical axis of the telescope intersects the azimuthal axis, it is perpendicular to it and it intersects the left cross of a given pair on the rectification target. The camera is rotated so that its optical axis (represented by the digital crosshair) intersects the right cross on the target and then is fixed using set screws. As the screws are tightened the camera is unintentionally rotated a bit again which causes the visual offset between the crosshair and the cross on the target. The offset expressed in pixels is recorded and transformed to the default angle $\beta$ expressed in milliradians (see Figure) of rotation along Z-axis of the joint \texttt{camera} in the camera unit model (see Section \ref{txt:camera_unit}):
+A military optical monocular telescope (see Figure \ref{fig:rect_telescope}) is mounted on top of the manipulator. The optical axis of the telescope intersects the azimuthal axis, it is perpendicular to it and it intersects the left cross of a given pair on the rectification target. The camera is rotated so that its optical axis (represented by the digital crosshair) intersects the right cross on the target and then is fixed using set screws. As the screws are tightened the camera is unintentionally rotated a bit again which causes the visual offset between the crosshair and the cross on the target. The offset expressed in pixels is recorded and transformed to the default angle $\beta$ expressed in milliradians (see Figure \ref{fig:rect_pixel_offset}) of rotation along Z-axis of the joint \texttt{camera} in the camera unit model (see Section \ref{txt:camera_unit}):
 
 \begin{equation*}
 \begin{aligned}
@@ -370,7 +370,7 @@ This section discusses the various approaches for detection and tracking of the 
 Choosing a suitable representation of an object of interest is is a first step when designing a tracker. It is a crucial task since the choice of the features determines the type of the final tracker due to the strong relationship between the algorithm and the representation of the object and it can significantly impact the overall performance of the tracker. There are two main representations, the \textit{shape} and the \textit{appearance} \cite{Yilmaz:2006:OTS:1177352.1177355}.
 
 \paragraph{shape representation} 
-This category covers the use of points, geometric shapes, silhouette and contour, articulated models and skeletal models. The point representation is not suitable for OLS since the distant aerial objects appear relatively small in the image and might not provide enough distinctive points. The geometric shapes seem suitable as long as the aerial object is far enough so that it could be approximated by a primitive geometric shape. Silhouettes and contours are mostly used for tracking non rigid objects (which is not the case of OLS), neither articulated model is needed to describe an UAV. Considering the small size of the object of interest, a skeletal model would most probably degrade to a single line or a point.
+This category covers the use of points, geometric shapes, silhouettes and contours, articulated models and skeletal models. The point representation is not suitable for OLS since the distant aerial objects appear relatively small in the image and might not provide enough distinctive points. The geometric shapes seem suitable as long as the aerial object is far enough so that it could be approximated by a primitive geometric shape. Silhouettes and contours are mostly used for tracking non rigid objects (which is not the case of OLS), neither articulated model is needed to describe an UAV. Considering the small size of the object of interest, a skeletal model would most probably degrade to a single line or a point.
 
 \paragraph{appearance representation} 
 The second category covers the use of templates, active appearance models and multiview appearance models. Active appearance models seem promising since they simultaneously model the object shape and appearance, however there is a need for an offline training phase. The templates combine the spatial and appearance information and can scale well to support varying object size (UAV approaching or flying away). A multiview appearance model might perform even better since it is designed to be robust against variation of the appearance of one object due to the change of its orientation.
@@ -387,16 +387,16 @@ A couple of approaches can be distinguished among the detectors using natural ap
 
 \paragraph{background modeling} Under the assumption an observed scene does not change rapidly its appearance can be learned resulting in a background model. The task of the object detector is then to estimate for each subregion or even each pixel whether it belongs to a background or to a foreground (i.e. the object of interest). A widely used approach is to model each pixel as a mixture of Gaussians (in order to support a periodically changing background). Another possible solution is to model intensity variations of separate pixels as the states (including both \textit{background} and \textit{foreground} state) and then with the help of Hidden Markov Models to estimate the state a given pixel is currently in. Since it is possible to enhance these algorithms to allow for the camera motion (resulting in the change of the camera view) they seem suitable for the OLS system. 
 
-\paragraph{supervised classification} If the (coarse) class of the objects to be tracked is known beforehand and a proper dataset is available, a classifier can be trained to detect the objects. Among others the neural networks or adaptive boosting methods are widely used. Since the OLS aims to localize UAVs, the utilization of a classifier seems like a suitable solution.
+\paragraph{supervised classification} If the (coarse) class of the objects to be tracked is known beforehand and a proper dataset is available, a classifier can be trained to detect the objects. Among others, the neural networks or adaptive boosting methods are widely used. Since the OLS aims to localize UAVs, the utilization of a classifier seems like a suitable solution.
 
 %-------------------------------------------------------------------------
 %-------------------------------------------------------------------------
 \section{Tracking}
 
-The main purpose of the tracker is to iteratively estimating the trajectory of the tracked object from frame to frame and regarding the approaches the trackers can be divided into three main categories \cite{Yilmaz:2006:OTS:1177352.1177355}:
+The main purpose of the tracker is to iteratively estimate the trajectory of the tracked object from frame to frame and regarding the approaches the trackers can be divided into three main categories \cite{Yilmaz:2006:OTS:1177352.1177355}:
 
 \paragraph{point tracking} 
-The tracker detects the keypoints in each frame and, select those representing the object and computes the transformation from the previous frame.
+The tracker detects the keypoints in each frame, selects those representing the object and computes the transformation from the previous frame.
 
 \paragraph{kernel tracking} 
 This approach corresponds to a representation of an object using a template, where kernel is the description of both shape and appearance.
@@ -412,7 +412,7 @@ Since the representation by a template (or multiple templates) suits conditions 
 
 The Tracking Learning Detection (TLD) \cite{Kalal:2012:TRA:2225045.2225082} is an algorithm designed for performing so called long-term tracking, a robust tracking of an object which might change its appearance, be temporarily occluded by closer objects or temporarily completely disappear from the scene. Since this task cannot be achieved solely by a tracker nor by a detector, the TLD aims to combine the strengths of the detection and tracking algorithms by combining their results. Furthermore the algorithm incorporates the online adaptation subsystem capable of learning the new appearances of the tracked object in the course of the tracking.
 
-A conceptual diagram of the TLD algorithm is shown in Figure \ref{fig:tld_block_diagram}. The \texttt{tracking} component tracks the object and for each frame produces the new position. It expects that object does not disappear (occlusion, out of FOV) from the scene and if it does the tracker fails. The \texttt{detection} component performs full scanning of the image for each frame. It detects the object and if needed it reinitializes the tracker. The \texttt{learning} component is capable of generating new appearances of the tracked object and thus improving the performance of the detector. 
+A conceptual diagram of the TLD algorithm is shown in Figure \ref{fig:tld_block_diagram}. The \texttt{tracking} component tracks the object and for each frame produces the new position. It expects that object does not disappear (occlusion, out of FOV) from the scene and if it does, the tracker fails. The \texttt{detection} component performs full scanning of the image for each frame. It detects the object and if needed it reinitializes the tracker. The \texttt{learning} component is capable of generating new appearances of the tracked object and thus improving the performance of the detector. 
 
 The object itself is modeled as a set of patches, each patch being already learned appearance represented by the rectangular bounding box around the object rescaled to a normalized resolution of 15 x 15 pixels. The similarity of the patches is given by the normalized cross-correlation.
 
@@ -435,9 +435,9 @@ The object itself is modeled as a set of patches, each patch being already learn
 	\end{minipage}
 \end{figure}
 
-\paragraph{Detection} Detector treats each frame as an independent one and scans a full image. A scanning window is used which is gradually scaled (in order for the detector to achieve scale invariance) and iteratively shifted along a regular grid of candidate positions. Since this task is computationally intensive a cascade classifier is used so that the detector could quickly decide whether a given subregion contains the object. Therefore a cascade classifier is used. In case of TLD it consists of three sequential stages specifically ordered so that earlier the stage is the more subregions it should reduce while being computationally less expensive. Should the sub-region be rejected by any stage, later stages ignore it completely.
+\paragraph{Detection} Detector treats each frame as an independent one and scans a full image. A scanning window is used and it is gradually scaled (in order for the detector to achieve scale invariance) and iteratively shifted along a regular grid of candidate positions. Since this task is computationally intensive a cascade classifier is used so that the detector could quickly decide whether a given subregion contains the object. In case of TLD, the cascade classifier consists of three sequential stages specifically ordered so that earlier the stage is the more subregions it should reduce while being computationally less expensive. Should the sub-region be rejected by any stage, later stages ignore it completely.
 
-\paragraph{Tracking} The tracking sub-system is based on thew algorithm called the Median-Flow tracker. A $10 \times 10$ grid is used to select the positions within the bounding box representing the object. For each position a given point is tracked between the consecutive frames using pyramidal Lucas-Kanade tracker and eventually the tracker only accepts a 50\% of the most reliable displacements to estimate a new position of the target.
+\paragraph{Tracking} The tracking sub-system is based on the algorithm called the Median-Flow tracker. A $10 \times 10$ grid is used to select the positions within the bounding box representing the object. For each position a given point is tracked between the consecutive frames using pyramidal Lucas-Kanade tracker and eventually the tracker only accepts a 50\% of the most reliable displacements to estimate a new position of the target.
 
 \paragraph{Learning} Since the classifier used in the detection phase is initially trained using only one positive patch (the initial bounding box selected by a user) it tends to make errors as a video stream progress since the moving object of interest change its appearance due to the transformation caused by its motion. Therefore an online so called \texttt{P-N learning} component is incorporated in the system which gradually extends the training sets. Two experts are used, a \texttt{P-expert} identifies only false negatives while \texttt{N-expert} identifies only false positives. Once a wrongly classified patch is found, the experts extend the training set and the classifier is retrained (see Figure \ref{fig:tld_pn_learning_block_diagram}).
 
@@ -473,13 +473,13 @@ The object itself is modeled as a set of patches, each patch being already learn
 
 The whole system is built on the robotic framework Robot Operating System (for details see Section \ref{txt:robot_operating_system}). Since the ROS defines multiple conventions, restrictions and best practices the whole system design including the selection of a programing language, a programing and a communication paradigm, a target platform and a tool for physical simulations is impacted by the possibilities of this framework.
 
-As of writing this text a current state of the implementation mainly builds on the virtual environment provided by the physical simulator Gazebo (see Section \ref{txt:application_of_gazebo}). When confronted with the overview of all subsystems making up the whole system presented in Section \ref{txt:system_overview} so far the following parts are already designed, implemented and/or integrated:
+As of writing this text a current state of the implementation mainly builds on the virtual environment provided by the physical simulator Gazebo (see Section \ref{txt:application_of_gazebo}). When confronted with the overview of all subsystems making up the whole system presented in Section \ref{txt:system_overview}, so far the following parts are already designed, implemented and/or integrated:
 
 \begin{itemize}
 \item manual control of the manipulator using peripheral devices
 \item manual selection of a target and distribution of its appearance to all CUs
 \item integration and utilization of a OpenTLD tracker
-\item triangulation of a 3D positions of a target within global frame
+\item the first prototype of triangulation of a 3D positions of a target within global frame
 \item integration of all subsystems
 \end{itemize}
 
@@ -498,7 +498,7 @@ Furthermore a few additional tools were utilized and/or implemented as the neces
 Despite its name the ROS\footnote{The official website of ROS: \url{http://www.ros.org}} is not an operating system but rather a collection of open source libraries, tools and conventions which serve the purpose of a middlewear running alongside a real operating system, however it provides the programmer with the hardware abstraction,  low-level device control, implementation of commonly-used functionality,
 message-passing between processes, and package management \cite{O'Kane201310}.
 
-Since the original motivation for developing ROS was to support the collaboration among the experts in the field of robotics in the means of a common software platform \cite{ROS-an-open-source-Robot-Operating-System}, a huge developer community has formed around ROS which resulted in wide-scale penetration of this framework as well as the support for a huge range of hardware devices.
+Since the original motivation for developing ROS was to support the collaboration among the experts in the field of robotics in the means of a common software platform~\cite{ROS-an-open-source-Robot-Operating-System}, a huge developer community has formed around ROS which resulted in wide-scale penetration of this framework as well as the support for a huge range of hardware devices.
 
 %.........................................................................
 %.........................................................................
@@ -518,7 +518,7 @@ The OLS is designed to become a relatively complex system, thus it exhibits non-
 		native support for hardware such as Prosilica camera, manipulator Flir PTU D46-70, joystick, keyboard & nodes implementing image capture from Prosilica cameras, capturing events from keyboards and joysticks \\
 		modularity and reusability of source code & each subsystem is represented by a separate process (node), straightforward reusability \\
 		distribution of computation among multiple computers & provides abstraction layer for distributing nodes across devices \\
-		simple data exchange among subsystems & the publisher subscriber paradigm \cite{O'Kane201310}, support for custom message formats \\
+		simple data exchange among subsystems & the publisher/subscriber paradigm \cite{O'Kane201310}, support for custom message formats \\
 		real time performance & C++ implementation \\
 		modelling and simulating the robot & custom language \texttt{URDF}\footnotemark ~for robot modeling, integration with Gazebo \\
 		specifying a kinematic chain, heavy 3D transformation computation & native support for computing transformation between frames using package \texttt{tf} \\
@@ -543,10 +543,10 @@ ROS provides a wide range of standard packages for interaction with various hard
 	This package wraps the Vimba GigE SDK provided by Allied Vision Technologies, the manufacturer of the Prosilica series cameras, and allows the programmer to subscribe to the topic \texttt{camera\textbackslash image\_raw} and easily access the image stream.
 	
 	\item[keyboard]\footnote{Package keyboard: \url{http://wiki.ros.org/keyboard}} \hfill \\
-	The package process the keyboard events and expose them via \texttt{keydown} and \texttt{keyup} topics.
+	The package processes the keyboard events and exposes them via \texttt{keydown} and \texttt{keyup} topics.
 	
 	\item[joy]\footnote{Package joy: \url{http://wiki.ros.org/joy}} \hfill \\
-	This package process the events from a joystick and/or gamepad and expose them via \texttt{joy} topic.
+	This package processes the events from a joystick and/or gamepad and exposes them via \texttt{joy} topic.
 	
 	\item[tf]\footnote{Package tf: \url{http://wiki.ros.org/tf}} \hfill \\
 	The package manages the distribution of the states of all joints within all robot models (in case of OLS the kinematic chains representing the camera units) among all nodes as well as it performs the transformation between given frames on demand \cite{tf}.
@@ -564,22 +564,22 @@ Given the modular concept of the ROS it is most convenient to divide the whole s
 %.........................................................................
 \subsection{Hardware} \label{txt:hardware}
 
-Considering the big picture of the system, OLS consists of four camera stations, a hardware devices necessary for network communication and the peripherals for manual control. There are two types of camera stations, a tracking station and an overview station (see Section \ref{txt:system_overview}). All stations communicate with each other vie Ethernet switch. The peripheral devices (keyboard, joystick) allowing the operator to manually control the system are connected to the overview station (see Figure \ref{fig:hw_ols}).
+Considering the big picture of the system, OLS consists of four camera stations, a hardware devices necessary for network communication and the peripherals for manual control. There are two types of camera stations, a tracking station and an overview station (see Section~\ref{txt:system_overview}). All stations communicate with each other vie Ethernet switch. The peripheral devices (keyboard, joystick) allowing the operator to manually control the system are connected to the overview station (see Figure \ref{fig:hw_ols}).
 
 %% The big picture diagram of the hardware components of the OLS
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=10cm]{fig/hw_ols.pdf}
+	\includegraphics[width=9cm]{fig/hw_ols.pdf}
 	\caption{The big picture diagram of the main components of the OLS.}
 	\label{fig:hw_ols}
 \end{figure}
 
-A camera station itself consists of a camera unit (see Section \ref{txt:camera_unit}) and a computer running the OLS software. The camera unit is controlled by the controller \texttt{STM32F4007} which communicates with the manipulator \texttt{Flir PTU D46-70}, a GPS module and a zoom lense. The camera \texttt{Prosilica GT 1290C} is connected directly to a computer running OLS system (for more details see Figure \ref{fig:hw_camera_unit}).
+A camera station itself consists of a camera unit (see Section \ref{txt:camera_unit}) and a computer running the OLS software. The camera unit is controlled by the controller \texttt{STM32F4007} which communicates with the manipulator \texttt{Flir PTU D46-70}, a GPS module and a zoom lens. The camera \texttt{Prosilica GT 1290C} is connected directly to a computer running OLS system (for more details see Figure \ref{fig:hw_camera_unit}).
 
 %% The diagram of the hardware components of the camera unit
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=10cm]{fig/hw_camera_unit.pdf}
+	\includegraphics[width=9cm]{fig/hw_camera_unit.pdf}
 	\caption{The diagram of the hardware components of the camera unit depicting both the hardware devices and the communication standards.}
 	\label{fig:hw_camera_unit}
 \end{figure}
@@ -595,14 +595,14 @@ The system is divided into multiple ROS nodes (processes running in the operatin
 %% The diagram of the software components - ROS nodes - and ROS topics.
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=15.5cm]{fig/sw_ols.pdf}
+	\includegraphics[width=14.5cm]{fig/sw_ols.pdf}
 	\caption{The diagram of the software components represented by the ROS nodes. The communication among topics is implemented using ROS topics (normal arrows) and ROS services (dashed arrows).}
 	\label{fig:sw_ols}
 \end{figure}
 
 The nodes running within the \texttt{master} namespace serve the purpose of the access point for an user (an operator) as well as the main controller of the whole system. The node \texttt{controls} keeps the information about the tracked targets and distributes the workload to the separate camera units based on their position and orientation with regards to the newly discovered target. The node \texttt{position\_estimation} calculates the triangulation and estimates the 3D position of the target. The node \texttt{GUI} implements the graphical user interface allowing the operator to control the system and the nodes \texttt{joy} and \texttt{keyboard} process the events from peripherals.
 
-Each of the namespaces \texttt{camera\_unit\_N} control a separate camera unit. The namespace contains the standard node \texttt{avt\_vimba\_camera} processing the input image stream from Prosilica camera, and implements the node \texttt{manipulator} which controls the manipulator and publishes its state and the node \texttt{detection\_and\_tracking} which performs the computationally most expensive tasks of the object detection, learning its appearance and tracking.
+Each of the namespaces \texttt{camera\_unit\_N} controls a separate camera unit. The namespace contains the standard node \texttt{avt\_vimba\_camera} processing the input image stream from Prosilica camera and it implements the node \texttt{manipulator}, which controls the manipulator and publishes its state, and the node \texttt{detection\_and\_tracking}, which performs the computationally most expensive tasks of the object detection, learning its appearance and tracking.
 
 %-------------------------------------------------------------------------
 %-------------------------------------------------------------------------
@@ -617,7 +617,7 @@ Since the Gazebo is distributed also as one of the standard packages of the ROS 
 %% The screenshot of Gazebo scene and image streams from cameras.
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=15.5cm]{fig/gazebo_camera_stream.png}
+	\includegraphics[width=14.5cm]{fig/gazebo_camera_stream.png}
 	\caption{The screenshot of a Gazebo simulation (left) consisting of a virtual environment (the gas station), a flying object (the red sphere) and four manipulators. All four virtual camera streams are displayed real-time using \texttt{rviz} tool (right).}
 	\label{fig:gazebo_camera_stream}
 \end{figure}
@@ -646,8 +646,8 @@ Besides the framework ROS a few other publicly available libraries are used with
 \chapter{Conclusion} \label{txt:conclusion}
 % 1 - 2 ns
 
-In this work the novel system for autonomous optical localization of aerial targets was presented. The principle of triangulation is well known and widely used, however the main contribution of the system is the fact it is designed to operate autonomously from detecting the object to estimating its position. As a first step a suitable placement of available camera units had to be designed and the proper hardware which each camera station consists of had to be selected. A model of the camera unit represented by a kinematic chain was proposed and all camera units were then rectified in order to minimize the difference between the model and the real construction of the camera units.
+In this work the novel system for autonomous optical localization of aerial targets was presented. The principle of triangulation is well known and widely used, however the main contribution of the system is the fact it is designed to operate autonomously from detecting the object to estimating its position. As a first step a suitable placement of available camera units had to be designed and the proper hardware components, which each camera station consists of, had to be selected. A model of the camera unit represented by a kinematic chain was proposed and all camera units were then rectified in order to minimize the difference between the model and the real construction of the camera units.
 
-As fo the software solution the most promising computer vision techniques for both detection and tracing of the target were proposed and one of them, a free implementation of the TLD algorithm was eventually integrated in the system. The first prototype of the algorithm for final estimation of the target's location utilizing the triangulation was proposed and implemented as well. The architecture of the system based on the ROS framework was designed and implemented and the physical simulation software Gazebo was used to experiment with the system placed in a virtual scene.
+As fo the software solution the most promising computer vision techniques for both detection and tracing of the target were proposed and one of them, a free implementation of the TLD algorithm was eventually integrated in the system. The architecture of the system based on the ROS framework was designed and implemented and the physical simulation software Gazebo was used to experiment with the system placed in a virtual scene.
 
 As far as the further development is concerned, the autonomous detection algorithm will be implemented and the tracking algorithm will be improved on since the OLS system expects a static background (as opposed to the TLD) so the background modeling could be incorporated to further improve the tracker performance. The subsystem for target handoff among the cameras will be designed and implemented and the localization algorithm will be improved on to reflect the uncertainty of the locations and orientations of the separate joints in the kinematic models and to provide the result in global geographical coordinates (most likely UTM). A proper dataset will be acquired and the system will be tested thoroughly.
